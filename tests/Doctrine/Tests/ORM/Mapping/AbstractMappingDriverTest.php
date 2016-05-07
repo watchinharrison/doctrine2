@@ -4,10 +4,9 @@ namespace Doctrine\Tests\ORM\Mapping;
 
 use Doctrine\Common\Persistence\Mapping\RuntimeReflectionService;
 use Doctrine\ORM\EntityManager;
+use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\Events;
 use Doctrine\ORM\Mapping\ClassMetadataFactory;
-use Doctrine\ORM\Mapping\DiscriminatorColumn;
-use Doctrine\ORM\Mapping\Id;
 use Doctrine\ORM\Mapping\MappingException;
 use Doctrine\ORM\Mapping\UnderscoreNamingStrategy;
 use Doctrine\Tests\Models\Cache\City;
@@ -199,7 +198,7 @@ abstract class AbstractMappingDriverTest extends OrmTestCase
      */
     public function testStringFieldMappings($class)
     {
-        $this->assertEquals('string', $class->fieldMappings['name']['type']);
+        $this->assertEquals('string', $class->fieldMappings['name']['type']->getName());
         $this->assertEquals(50, $class->fieldMappings['name']['length']);
         $this->assertTrue($class->fieldMappings['name']['nullable']);
         $this->assertTrue($class->fieldMappings['name']['unique']);
@@ -240,7 +239,7 @@ abstract class AbstractMappingDriverTest extends OrmTestCase
     public function testIdentifier($class)
     {
         $this->assertEquals(array('id'), $class->identifier);
-        $this->assertEquals('integer', $class->fieldMappings['id']['type']);
+        $this->assertEquals('integer', $class->fieldMappings['id']['type']->getName());
         $this->assertEquals(ClassMetadata::GENERATOR_TYPE_AUTO, $class->generatorType, "ID-Generator is not ClassMetadata::GENERATOR_TYPE_AUTO");
 
         return $class;
@@ -410,7 +409,13 @@ abstract class AbstractMappingDriverTest extends OrmTestCase
         $class = $this->createClassMetadata('Doctrine\Tests\ORM\Mapping\Animal');
 
         $this->assertEquals(
-            array('name' => 'discr', 'type' => 'string', 'length' => '32', 'fieldName' => 'discr', 'columnDefinition' => null),
+            array(
+                'name'             => 'discr',
+                'type'             => Type::getType('string'),
+                'length'           => '32',
+                'fieldName'        => 'discr',
+                'columnDefinition' => null
+            ),
             $class->discriminatorColumn
         );
     }
@@ -463,8 +468,8 @@ abstract class AbstractMappingDriverTest extends OrmTestCase
         $this->assertArrayHasKey('type', $class->fieldMappings['id']);
         $this->assertArrayHasKey('type', $class->fieldMappings['name']);
 
-        $this->assertEquals('string', $class->fieldMappings['id']['type']);
-        $this->assertEquals('string', $class->fieldMappings['name']['type']);
+        $this->assertEquals('string', $class->fieldMappings['id']['type']->getName());
+        $this->assertEquals('string', $class->fieldMappings['name']['type']->getName());
 
 
 
@@ -1031,9 +1036,9 @@ abstract class AbstractMappingDriverTest extends OrmTestCase
             $this->markTestSkipped('PHP Mapping Drivers have no defaults.');
         }
         $class = $this->createClassMetadata(__NAMESPACE__ . '\SingleTableEntityNoDiscriminatorColumnMapping');
-        $this->assertEquals('string', $class->discriminatorColumn['type']);
+        $this->assertEquals('string', $class->discriminatorColumn['type']->getName());
         $class = $this->createClassMetadata(__NAMESPACE__ . '\SingleTableEntityIncompleteDiscriminatorColumnMapping');
-        $this->assertEquals('string', $class->discriminatorColumn['type']);
+        $this->assertEquals('string', $class->discriminatorColumn['type']->getName());
     }
 
     /**
