@@ -414,7 +414,8 @@ abstract class AbstractMappingDriverTest extends OrmTestCase
                 'type'             => Type::getType('string'),
                 'length'           => '32',
                 'fieldName'        => 'discr',
-                'columnDefinition' => null
+                'columnDefinition' => null,
+                'tableName'        => 'Animal',
             ),
             $class->discriminatorColumn
         );
@@ -1389,7 +1390,8 @@ class DDC807Entity
         $metadata->setDiscriminatorColumn(array(
             'name'              => "dtype",
             'type'              => "string",
-            'columnDefinition'  => "ENUM('ONE','TWO')"
+            'columnDefinition'  => "ENUM('ONE','TWO')",
+            'tableName'         => $metadata->getTableName(),
         ));
 
         $metadata->setIdGeneratorType(ClassMetadata::GENERATOR_TYPE_NONE);
