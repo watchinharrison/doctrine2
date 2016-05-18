@@ -238,7 +238,7 @@ class ClassMetadataBuilderTest extends OrmTestCase
 
     public function testAddField()
     {
-        self::assertIsFluent($this->builder->addField('name', 'string'));
+        self::assertIsFluent($this->builder->addProperty('name', 'string'));
         self::assertEquals(
             array(
                 'columnName'     => 'name',
