@@ -246,7 +246,7 @@ class ClassMetadataBuilderTest extends OrmTestCase
 
         $property = $this->cm->getProperty('name');
 
-        self::assertEquals('name', $property->getFieldName());
+        self::assertEquals('name', $property->getName());
         self::assertEquals($this->cm, $property->getDeclaringClass());
         self::assertEquals('string', $property->getTypeName());
         self::assertEquals('CmsUser', $property->getTableName());
@@ -266,7 +266,7 @@ class ClassMetadataBuilderTest extends OrmTestCase
 
         $property = $this->cm->getProperty('name');
 
-        self::assertEquals('name', $property->getFieldName());
+        self::assertEquals('name', $property->getName());
         self::assertEquals($this->cm, $property->getDeclaringClass());
         self::assertEquals('string', $property->getTypeName());
         self::assertEquals('CmsUser', $property->getTableName());
@@ -288,7 +288,7 @@ class ClassMetadataBuilderTest extends OrmTestCase
 
         $property = $this->cm->getProperty('name');
 
-        self::assertEquals('name', $property->getFieldName());
+        self::assertEquals('name', $property->getName());
         self::assertEquals($this->cm, $property->getDeclaringClass());
         self::assertEquals('integer', $property->getTypeName());
         self::assertEquals('CmsUser', $property->getTableName());
@@ -312,7 +312,7 @@ class ClassMetadataBuilderTest extends OrmTestCase
         $property = $this->cm->getProperty('name');
 
         self::assertEquals(array('id'), $this->cm->identifier);
-        self::assertEquals('id', $property->getFieldName());
+        self::assertEquals('id', $property->getName());
         self::assertEquals($this->cm, $property->getDeclaringClass());
         self::assertEquals('integer', $property->getTypeName());
         self::assertEquals('CmsUser', $property->getTableName());
@@ -330,7 +330,7 @@ class ClassMetadataBuilderTest extends OrmTestCase
 
         $property = $this->cm->getProperty('name');
 
-        self::assertEquals('state', $property->getFieldName());
+        self::assertEquals('state', $property->getName());
         self::assertEquals($this->cm, $property->getDeclaringClass());
         self::assertEquals('integer', $property->getTypeName());
         self::assertEquals('CmsUser', $property->getTableName());

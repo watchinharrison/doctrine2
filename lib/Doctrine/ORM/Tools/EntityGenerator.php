@@ -23,6 +23,7 @@ use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\Common\Util\Inflector;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\Mapping\FieldMetadata;
+use Doctrine\ORM\Mapping\Property;
 
 /**
  * Generic class used to generate PHP5 entity classes from ClassMetadata instances.
@@ -742,7 +743,7 @@ public function __construct(<params>)
                 continue;
             }*/
 
-            $fieldName  = $property->getFieldName();
+            $fieldName  = $property->getName();
             $fieldType  = $property->getTypeName();
             $mappedType = $this->getType($fieldType);
             $param      = '$' . $fieldName;
@@ -1716,7 +1717,7 @@ public function __construct(<params>)
                 }
             }
 
-            if ($metadata->versionField === $propertyMetadata->getFieldName()) {
+            if ($metadata->versionField === $propertyMetadata->getName()) {
                 $lines[] = $this->spaces . ' * @' . $this->annotationsPrefix . 'Version';
             }
         }
@@ -1823,11 +1824,11 @@ public function __construct(<params>)
     }
 
     /**
-     * @param PropertyMetadata $property
+     * @param Property $property
      *
      * @return string|null
      */
-    private function nullableFieldExpression(PropertyMetadata $property)
+    private function nullableFieldExpression(Property $property)
     {
         return $property->isNullable() ? 'null' : null;
     }
