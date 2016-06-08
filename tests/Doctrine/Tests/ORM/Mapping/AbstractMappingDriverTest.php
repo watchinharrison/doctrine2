@@ -6,6 +6,7 @@ use Doctrine\Common\Persistence\Mapping\RuntimeReflectionService;
 use Doctrine\ORM\EntityManager;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\Events;
+use Doctrine\ORM\Mapping\DiscriminatorColumnMetadata;
 use Doctrine\ORM\Mapping\FieldMetadata;
 use Doctrine\ORM\Mapping\ClassMetadataFactory;
 use Doctrine\ORM\Mapping\MappingException;
@@ -435,17 +436,15 @@ abstract class AbstractMappingDriverTest extends OrmTestCase
 
         $class = $this->createClassMetadata('Doctrine\Tests\ORM\Mapping\Animal');
 
-        self::assertEquals(
-            array(
-                'name'             => 'discr',
-                'type'             => Type::getType('string'),
-                'length'           => '32',
-                'fieldName'        => 'discr',
-                'columnDefinition' => null,
-                'tableName'        => 'Animal',
-            ),
-            $class->discriminatorColumn
-        );
+        self::assertNotNull($class->discriminatorColumn);
+
+        $discrColumn = $class->discriminatorColumn;
+
+        self::assertEquals('Animal', $discrColumn->getTableName());
+        self::assertEquals('discr', $discrColumn->getColumnName());
+        self::assertEquals('string', $discrColumn->getTypeName());
+        self::assertEquals(32, $discrColumn->getLength());
+        self::assertNull($discrColumn->getColumnDefinition());
     }
 
     /**
@@ -552,11 +551,12 @@ abstract class AbstractMappingDriverTest extends OrmTestCase
     {
         $class = $this->createClassMetadata(__NAMESPACE__ . '\DDC807Entity');
 
-        self::assertArrayHasKey('columnDefinition', $class->discriminatorColumn);
-        self::assertArrayHasKey('name', $class->discriminatorColumn);
+        self::assertNotNull($class->discriminatorColumn);
 
-        self::assertEquals("ENUM('ONE','TWO')", $class->discriminatorColumn['columnDefinition']);
-        self::assertEquals("dtype", $class->discriminatorColumn['name']);
+        $discrColumn = $class->discriminatorColumn;
+
+        self::assertEquals('dtype', $discrColumn->getColumnName());
+        self::assertEquals("ENUM('ONE','TWO')", $discrColumn->getColumnDefinition());
     }
 
     /**
@@ -818,11 +818,10 @@ abstract class AbstractMappingDriverTest extends OrmTestCase
      */
     public function testAttributeOverridesMapping()
     {
-
         $factory       = $this->createClassMetadataFactory();
         $adminMetadata = $factory->getMetadataFor('Doctrine\Tests\Models\DDC964\DDC964Admin');
 
-        self::assertEquals(array('user_id'=>'id','user_name'=>'name'), $adminMetadata->fieldNames);
+        self::assertEquals(array('user_id'=>'id', 'user_name'=>'name'), $adminMetadata->fieldNames);
 
         self::assertNotNull($adminMetadata->getProperty('id'));
 
@@ -831,7 +830,6 @@ abstract class AbstractMappingDriverTest extends OrmTestCase
         self::assertTrue($idProperty->isPrimaryKey());
         self::assertEquals('id', $idProperty->getName());
         self::assertEquals('user_id', $idProperty->getColumnName());
-        self::assertEquals(150, $idProperty->getLength());
 
         self::assertNotNull($adminMetadata->getProperty('name'));
 
@@ -855,7 +853,6 @@ abstract class AbstractMappingDriverTest extends OrmTestCase
         self::assertTrue($idProperty->isPrimaryKey());
         self::assertEquals('id', $idProperty->getName());
         self::assertEquals('guest_id', $idProperty->getColumnName());
-        self::assertEquals(140, $idProperty->getLength());
 
         self::assertNotNull($guestMetadata->getProperty('name'));
 
@@ -997,6 +994,7 @@ abstract class AbstractMappingDriverTest extends OrmTestCase
         $em      = $this->_getTestEntityManager();
         $factory = $this->createClassMetadataFactory($em);
         $class   = $factory->getMetadataFor(City::CLASSNAME);
+
         self::assertArrayHasKey('usage', $class->cache);
         self::assertArrayHasKey('region', $class->cache);
         self::assertEquals(ClassMetadata::CACHE_USAGE_READ_ONLY, $class->cache['usage']);
@@ -1052,10 +1050,14 @@ abstract class AbstractMappingDriverTest extends OrmTestCase
         if (strpos(get_class($this), 'PHPMappingDriver') !== false) {
             $this->markTestSkipped('PHP Mapping Drivers have no defaults.');
         }
+
         $class = $this->createClassMetadata(__NAMESPACE__ . '\SingleTableEntityNoDiscriminatorColumnMapping');
-        self::assertEquals(255, $class->discriminatorColumn['length']);
+
+        self::assertEquals(255, $class->discriminatorColumn->getLength());
+
         $class = $this->createClassMetadata(__NAMESPACE__ . '\SingleTableEntityIncompleteDiscriminatorColumnMapping');
-        self::assertEquals(255, $class->discriminatorColumn['length']);
+
+        self::assertEquals(255, $class->discriminatorColumn->getLength());
     }
 
     /**
@@ -1067,10 +1069,14 @@ abstract class AbstractMappingDriverTest extends OrmTestCase
         if (strpos(get_class($this), 'PHPMappingDriver') !== false) {
             $this->markTestSkipped('PHP Mapping Drivers have no defaults.');
         }
+
         $class = $this->createClassMetadata(__NAMESPACE__ . '\SingleTableEntityNoDiscriminatorColumnMapping');
-        self::assertEquals('string', $class->discriminatorColumn['type']->getName());
+
+        self::assertEquals('string', $class->discriminatorColumn->getTypeName());
+
         $class = $this->createClassMetadata(__NAMESPACE__ . '\SingleTableEntityIncompleteDiscriminatorColumnMapping');
-        self::assertEquals('string', $class->discriminatorColumn['type']->getName());
+
+        self::assertEquals('string', $class->discriminatorColumn->getTypeName());
     }
 
     /**
@@ -1082,10 +1088,14 @@ abstract class AbstractMappingDriverTest extends OrmTestCase
         if (strpos(get_class($this), 'PHPMappingDriver') !== false) {
             $this->markTestSkipped('PHP Mapping Drivers have no defaults.');
         }
+
         $class = $this->createClassMetadata(__NAMESPACE__ . '\SingleTableEntityNoDiscriminatorColumnMapping');
-        self::assertEquals('dtype', $class->discriminatorColumn['name']);
+
+        self::assertEquals('dtype', $class->discriminatorColumn->getColumnName());
+
         $class = $this->createClassMetadata(__NAMESPACE__ . '\SingleTableEntityIncompleteDiscriminatorColumnMapping');
-        self::assertEquals('dtype', $class->discriminatorColumn['name']);
+
+        self::assertEquals('dtype', $class->discriminatorColumn->getColumnName());
     }
 
 }
@@ -1413,20 +1423,22 @@ class DDC807Entity
      * @Column(type="integer")
      * @GeneratedValue(strategy="NONE")
      **/
-   public $id;
+    public $id;
 
-   public static function loadMetadata(ClassMetadata $metadata)
+    public static function loadMetadata(ClassMetadata $metadata)
     {
-         $metadata->addProperty('id', Type::getType('string'), array(
+        $metadata->addProperty('id', Type::getType('string'), array(
            'id' => true,
         ));
 
-        $metadata->setDiscriminatorColumn(array(
-            'name'              => "dtype",
-            'type'              => "string",
-            'columnDefinition'  => "ENUM('ONE','TWO')",
-            'tableName'         => $metadata->getTableName(),
-        ));
+        $discrColumn = new DiscriminatorColumnMetadata();
+
+        $discrColumn->setTableName($metadata->getTableName());
+        $discrColumn->setColumnName('dtype');
+        $discrColumn->setType(Type::getType('string'));
+        $discrColumn->setColumnDefinition("ENUM('ONE','TWO')");
+
+        $metadata->setDiscriminatorColumn($discrColumn);
 
         $metadata->setIdGeneratorType(ClassMetadata::GENERATOR_TYPE_NONE);
     }
