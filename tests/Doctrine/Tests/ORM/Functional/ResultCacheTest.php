@@ -2,12 +2,12 @@
 
 namespace Doctrine\Tests\ORM\Functional;
 
+use Doctrine\Common\Cache\ArrayCache;
 use Doctrine\DBAL\Types\Type as DBALType;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\Query\ResultSetMapping;
-use Doctrine\Tests\Models\CMS\CmsUser;
 use Doctrine\Tests\Models\CMS\CmsArticle;
-use Doctrine\Common\Cache\ArrayCache;
+use Doctrine\Tests\Models\CMS\CmsUser;
 use Doctrine\Tests\OrmFunctionalTestCase;
 
 /**
