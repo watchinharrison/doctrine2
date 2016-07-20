@@ -743,7 +743,6 @@ abstract class AbstractMappingDriverTest extends OrmTestCase
 
         self::assertEquals(array('user_id'=>'id'), $guestGroups['relationToSourceKeyColumns']);
         self::assertEquals(array('group_id'=>'id'), $guestGroups['relationToTargetKeyColumns']);
-        self::assertEquals(array('user_id','group_id'), $guestGroups['joinTableColumns']);
 
         self::assertEquals('ddc964_users_admingroups', $adminGroups['joinTable']['name']);
         self::assertEquals('adminuser_id', $adminGroups['joinTable']['joinColumns'][0]['name']);
@@ -751,8 +750,6 @@ abstract class AbstractMappingDriverTest extends OrmTestCase
 
         self::assertEquals(array('adminuser_id'=>'id'), $adminGroups['relationToSourceKeyColumns']);
         self::assertEquals(array('admingroup_id'=>'id'), $adminGroups['relationToTargetKeyColumns']);
-        self::assertEquals(array('adminuser_id','admingroup_id'), $adminGroups['joinTableColumns']);
-
 
         // assert address association mappings
         self::assertArrayHasKey('address', $guestMetadata->associationMappings);
@@ -1264,6 +1261,7 @@ class User
             array(
             'name' => 'user_id',
             'referencedColumnName' => 'id',
+            'onDelete' => null,
             'unique' => false,
             'nullable' => false,
             ),
@@ -1274,6 +1272,7 @@ class User
             array(
             'name' => 'group_id',
             'referencedColumnName' => 'id',
+            'onDelete' => null,
             'columnDefinition' => 'INT NULL',
             ),
            ),

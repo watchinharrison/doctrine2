@@ -641,13 +641,8 @@ class ClassMetadataBuilderTest extends OrmTestCase
                     'inversedBy' => NULL,
                     'isOwningSide' => true,
                     'sourceEntity' => 'Doctrine\\Tests\\Models\\CMS\\CmsUser',
-                    'isOnDeleteCascade' => true,
                     'relationToSourceKeyColumns' => array(
                         'group_id' => 'id',
-                    ),
-                    'joinTableColumns' => array(
-                        0 => 'group_id',
-                        1 => 'user_id',
                     ),
                     'relationToTargetKeyColumns' => array(
                         'user_id' => 'id',
@@ -855,13 +850,8 @@ class ClassMetadataBuilderTest extends OrmTestCase
                     'inversedBy' => NULL,
                     'isOwningSide' => true,
                     'sourceEntity' => 'Doctrine\\Tests\\Models\\CMS\\CmsUser',
-                    'isOnDeleteCascade' => true,
                     'relationToSourceKeyColumns' => array(
                         'group_id' => 'id',
-                    ),
-                    'joinTableColumns' => array(
-                        0 => 'group_id',
-                        1 => 'cmsgroup_id',
                     ),
                     'relationToTargetKeyColumns' => array(
                         'cmsgroup_id' => 'id',

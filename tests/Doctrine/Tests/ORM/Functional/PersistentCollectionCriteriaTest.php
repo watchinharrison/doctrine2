@@ -17,8 +17,6 @@ class PersistentCollectionCriteriaTest extends OrmFunctionalTestCase
 {
     protected function setUp()
     {
-        $this->enableQuotes = true;
-
         $this->useModelSet('tweet');
         $this->useModelSet('quote');
         
