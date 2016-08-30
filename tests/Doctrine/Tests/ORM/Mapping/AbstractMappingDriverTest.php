@@ -145,14 +145,13 @@ abstract class AbstractMappingDriverTest extends OrmTestCase
      */
     public function testEntitySequence($class)
     {
-        self::assertInternalType('array', $class->sequenceGeneratorDefinition, 'No Sequence Definition set on this driver.');
+        self::assertInternalType('array', $class->generatorDefinition, 'No Sequence Definition set on this driver.');
         self::assertEquals(
             array(
-                'sequenceName' => 'tablename_seq',
+                'sequenceName'   => 'tablename_seq',
                 'allocationSize' => 100,
-                'initialValue' => 1,
             ),
-            $class->sequenceGeneratorDefinition
+            $class->generatorDefinition
         );
     }
 
@@ -161,7 +160,14 @@ abstract class AbstractMappingDriverTest extends OrmTestCase
         $class = $this->createClassMetadata('Doctrine\Tests\ORM\Mapping\Animal');
 
         self::assertEquals(ClassMetadata::GENERATOR_TYPE_CUSTOM, $class->generatorType, "Generator Type");
-        self::assertEquals(array("class" => "stdClass"), $class->customGeneratorDefinition, "Custom Generator Definition");
+        self::assertEquals(
+            array(
+                'class'     => 'stdClass',
+                'arguments' => [],
+            ),
+            $class->generatorDefinition,
+            "Generator Definition"
+        );
     }
 
 
@@ -1118,8 +1124,8 @@ class User
     /**
      * @Id
      * @Column(type="integer", options={"foo": "bar", "unsigned": false})
-     * @generatedValue(strategy="AUTO")
-     * @SequenceGenerator(sequenceName="tablename_seq", initialValue=1, allocationSize=100)
+     * @GeneratedValue(strategy="AUTO")
+     * @SequenceGenerator(sequenceName="tablename_seq", allocationSize=100)
      **/
     public $id;
 
@@ -1304,10 +1310,9 @@ class User
             ),
         );
 
-        $metadata->setSequenceGeneratorDefinition(array(
-            'sequenceName' => 'tablename_seq',
+        $metadata->setGeneratorDefinition(array(
+            'sequenceName'   => 'tablename_seq',
             'allocationSize' => 100,
-            'initialValue' => 1,
         ));
 
         $metadata->addNamedQuery(array(
@@ -1334,7 +1339,10 @@ abstract class Animal
     public static function loadMetadata(ClassMetadata $metadata)
     {
         $metadata->setIdGeneratorType(ClassMetadata::GENERATOR_TYPE_CUSTOM);
-        $metadata->setCustomGeneratorDefinition(array("class" => "stdClass"));
+        $metadata->setGeneratorDefinition(array(
+            'class'     => 'stdClass',
+            'arguments' => [],
+        ));
     }
 }
 
