@@ -354,9 +354,6 @@ class ClassMetadataBuilderTest extends OrmTestCase
                     'inversedBy' => NULL,
                     'isOwningSide' => true,
                     'sourceEntity' => 'Doctrine\\Tests\\Models\\CMS\\CmsUser',
-                    'sourceToTargetKeyColumns' => array (
-                        'group_id' => 'id',
-                    ),
                     'orphanRemoval' => false,
                     'declaringClass' => $this->cm,
                   ),
@@ -407,9 +404,6 @@ class ClassMetadataBuilderTest extends OrmTestCase
                     'inversedBy' => NULL,
                     'isOwningSide' => true,
                     'sourceEntity' => 'Doctrine\\Tests\\Models\\CMS\\CmsUser',
-                    'sourceToTargetKeyColumns' => array(
-                        'group_id' => 'id',
-                    ),
                     'orphanRemoval' => false,
                     'declaringClass' => $this->cm,
                     'id' => true,
@@ -458,9 +452,6 @@ class ClassMetadataBuilderTest extends OrmTestCase
                     'inversedBy' => NULL,
                     'isOwningSide' => true,
                     'sourceEntity' => 'Doctrine\\Tests\\Models\\CMS\\CmsUser',
-                    'sourceToTargetKeyColumns' => array (
-                        'group_id' => 'id',
-                    ),
                     'orphanRemoval' => false,
                     'declaringClass' => $this->cm,
                 ),
@@ -510,9 +501,6 @@ class ClassMetadataBuilderTest extends OrmTestCase
                     'inversedBy' => NULL,
                     'isOwningSide' => true,
                     'sourceEntity' => 'Doctrine\\Tests\\Models\\CMS\\CmsUser',
-                    'sourceToTargetKeyColumns' => array(
-                        'group_id' => 'id',
-                    ),
                     'orphanRemoval' => false,
                     'declaringClass' => $this->cm,
                 ),
@@ -697,9 +685,6 @@ class ClassMetadataBuilderTest extends OrmTestCase
                     'inversedBy' => NULL,
                     'isOwningSide' => true,
                     'sourceEntity' => 'Doctrine\\Tests\\Models\\CMS\\CmsUser',
-                    'sourceToTargetKeyColumns' => array (
-                      'group_id' => 'id',
-                    ),
                     'orphanRemoval' => true,
                     'declaringClass' => $this->cm,
                 ),
