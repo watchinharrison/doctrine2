@@ -7,6 +7,7 @@ use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\Mapping\Builder\DiscriminatorColumnMetadataBuilder;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\Mapping\Builder\ClassMetadataBuilder;
+use Doctrine\ORM\Mapping\FetchMode;
 use Doctrine\Tests\OrmTestCase;
 
 /**
@@ -337,7 +338,7 @@ class ClassMetadataBuilderTest extends OrmTestCase
                         3 => 'merge',
                         4 => 'detach',
                     ),
-                    'fetch' => 4,
+                    'fetch' => FetchMode::EXTRA_LAZY,
                     'joinColumns' => array (
                         0 => array (
                             'name'                 => 'group_id',
@@ -387,7 +388,7 @@ class ClassMetadataBuilderTest extends OrmTestCase
                         3 => 'merge',
                         4 => 'detach',
                     ),
-                    'fetch' => 4,
+                    'fetch' => FetchMode::EXTRA_LAZY,
                     'joinColumns' => array(
                         0 => array(
                             'name'                 => 'group_id',
@@ -435,7 +436,7 @@ class ClassMetadataBuilderTest extends OrmTestCase
                         3 => 'merge',
                         4 => 'detach',
                     ),
-                    'fetch' => 4,
+                    'fetch' => FetchMode::EXTRA_LAZY,
                     'joinColumns' => array (
                         0 => array (
                             'name'                 => 'group_id',
@@ -483,7 +484,7 @@ class ClassMetadataBuilderTest extends OrmTestCase
                         3 => 'merge',
                         4 => 'detach',
                     ),
-                    'fetch' => 4,
+                    'fetch' => FetchMode::EXTRA_LAZY,
                     'id' => true,
                     'joinColumns' => array(
                         0 => array(
@@ -547,7 +548,7 @@ class ClassMetadataBuilderTest extends OrmTestCase
                         3 => 'merge',
                         4 => 'detach',
                     ),
-                    'fetch' => 4,
+                    'fetch' => FetchMode::EXTRA_LAZY,
                     'joinTable' => array(
                         'joinColumns' => array(
                             0 => array(
@@ -622,7 +623,7 @@ class ClassMetadataBuilderTest extends OrmTestCase
                     'inversedBy' => NULL,
                     'isOwningSide' => false,
                     'sourceEntity' => 'Doctrine\\Tests\\Models\\CMS\\CmsUser',
-                    'fetch' => 2,
+                    'fetch' => FetchMode::LAZY,
                     'cascade' => array(),
                     'orphanRemoval' => false,
                     'declaringClass' => $this->cm,
@@ -662,7 +663,7 @@ class ClassMetadataBuilderTest extends OrmTestCase
                     'cascade' => array (
                         0 => 'remove'
                     ),
-                    'fetch' => 2,
+                    'fetch' => FetchMode::LAZY,
                     'joinColumns' => array (
                         0 => array (
                             'name'                 => 'group_id',
@@ -707,7 +708,7 @@ class ClassMetadataBuilderTest extends OrmTestCase
                     'inversedBy' => NULL,
                     'isOwningSide' => false,
                     'sourceEntity' => 'Doctrine\\Tests\\Models\\CMS\\CmsUser',
-                    'fetch' => 2,
+                    'fetch' => FetchMode::LAZY,
                     'cascade' => array(
                         0 => 'remove'
                     ),
@@ -744,7 +745,7 @@ class ClassMetadataBuilderTest extends OrmTestCase
                     'fieldName' => 'groups',
                     'targetEntity' => 'Doctrine\\Tests\\Models\\CMS\\CmsGroup',
                     'cascade' => array(),
-                    'fetch' => 2,
+                    'fetch' => FetchMode::LAZY,
                     'joinTable' => array(
                         'joinColumns' => array(
                             0 => array(
