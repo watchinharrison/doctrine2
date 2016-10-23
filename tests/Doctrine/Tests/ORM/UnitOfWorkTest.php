@@ -7,6 +7,7 @@ use Doctrine\Common\NotifyPropertyChanged;
 use Doctrine\Common\Persistence\Mapping\MappingException;
 use Doctrine\Common\PropertyChangedListener;
 use Doctrine\ORM\Mapping\ClassMetadata;
+use Doctrine\ORM\Mapping\GeneratorType;
 use Doctrine\ORM\ORMInvalidArgumentException;
 use Doctrine\ORM\UnitOfWork;
 use Doctrine\ORM\ORMException;
@@ -79,7 +80,7 @@ class UnitOfWorkTest extends OrmTestCase
         // Setup fake persister and id generator for identity generation
         $userPersister = new EntityPersisterMock($this->_emMock, $this->_emMock->getClassMetadata('Doctrine\Tests\Models\Forum\ForumUser'));
         $this->_unitOfWork->setEntityPersister('Doctrine\Tests\Models\Forum\ForumUser', $userPersister);
-        $userPersister->setMockIdGeneratorType(ClassMetadata::GENERATOR_TYPE_IDENTITY);
+        $userPersister->setMockIdGeneratorType(GeneratorType::IDENTITY);
 
         // Test
         $user = new ForumUser();
@@ -119,11 +120,11 @@ class UnitOfWorkTest extends OrmTestCase
         //ForumUser
         $userPersister = new EntityPersisterMock($this->_emMock, $this->_emMock->getClassMetadata('Doctrine\Tests\Models\Forum\ForumUser'));
         $this->_unitOfWork->setEntityPersister('Doctrine\Tests\Models\Forum\ForumUser', $userPersister);
-        $userPersister->setMockIdGeneratorType(ClassMetadata::GENERATOR_TYPE_IDENTITY);
+        $userPersister->setMockIdGeneratorType(GeneratorType::IDENTITY);
         // ForumAvatar
         $avatarPersister = new EntityPersisterMock($this->_emMock, $this->_emMock->getClassMetadata('Doctrine\Tests\Models\Forum\ForumAvatar'));
         $this->_unitOfWork->setEntityPersister('Doctrine\Tests\Models\Forum\ForumAvatar', $avatarPersister);
-        $avatarPersister->setMockIdGeneratorType(ClassMetadata::GENERATOR_TYPE_IDENTITY);
+        $avatarPersister->setMockIdGeneratorType(GeneratorType::IDENTITY);
 
         // Test
         $user = new ForumUser();
@@ -231,7 +232,7 @@ class UnitOfWorkTest extends OrmTestCase
     {
         // Setup fake persister and id generator
         $userPersister = new EntityPersisterMock($this->_emMock, $this->_emMock->getClassMetadata('Doctrine\Tests\Models\Forum\ForumUser'));
-        $userPersister->setMockIdGeneratorType(ClassMetadata::GENERATOR_TYPE_IDENTITY);
+        $userPersister->setMockIdGeneratorType(GeneratorType::IDENTITY);
         $this->_unitOfWork->setEntityPersister('Doctrine\Tests\Models\Forum\ForumUser', $userPersister);
 
         // Create a test user
