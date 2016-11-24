@@ -35,6 +35,12 @@ class EntityManagerDecoratorTest extends \PHPUnit_Framework_TestCase
                 continue;
             }
 
+            /** Special case EntityManager::transactional() */
+            if ($method->getName() === 'transactional') {
+                $methods[] = array($method->getName(), array(function () {}));
+                continue;
+            }
+
             if ($method->getNumberOfRequiredParameters() === 0) {
                 $methods[] = array($method->getName(), array());
             } elseif ($method->getNumberOfRequiredParameters() > 0) {
