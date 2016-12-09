@@ -3,13 +3,14 @@
 namespace Doctrine\Tests\ORM\Mapping\Builder;
 
 use Doctrine\Common\Persistence\Mapping\RuntimeReflectionService;
-use Doctrine\DBAL\Types\Type;
+use Doctrine\ORM\Mapping\Builder\ClassMetadataBuilder;
 use Doctrine\ORM\Mapping\Builder\DiscriminatorColumnMetadataBuilder;
 use Doctrine\ORM\Mapping\ChangeTrackingPolicy;
 use Doctrine\ORM\Mapping\ClassMetadata;
-use Doctrine\ORM\Mapping\Builder\ClassMetadataBuilder;
 use Doctrine\ORM\Mapping\FetchMode;
 use Doctrine\ORM\Mapping\InheritanceType;
+use Doctrine\ORM\Mapping\JoinColumnMetadata;
+use Doctrine\ORM\Mapping\JoinTableMetadata;
 use Doctrine\Tests\OrmTestCase;
 
 /**
@@ -328,6 +329,12 @@ class ClassMetadataBuilderTest extends OrmTestCase
                   ->build()
         );
 
+        $joinColumn = new JoinColumnMetadata();
+        $joinColumn->setTableName('CmsUser');
+        $joinColumn->setColumnName('group_id');
+        $joinColumn->setReferencedColumnName('id');
+        $joinColumn->setOnDelete('CASCADE');
+
         self::assertEquals(
             array(
                 'groups' => array (
@@ -341,17 +348,7 @@ class ClassMetadataBuilderTest extends OrmTestCase
                         4 => 'detach',
                     ),
                     'fetch' => FetchMode::EXTRA_LAZY,
-                    'joinColumns' => array (
-                        0 => array (
-                            'name'                 => 'group_id',
-                            'referencedColumnName' => 'id',
-                            'nullable'             => true,
-                            'unique'               => false,
-                            'onDelete'             => 'CASCADE',
-                            'columnDefinition'     => NULL,
-                            'tableName'            => 'CmsUser',
-                        ),
-                    ),
+                    'joinColumns' => [$joinColumn],
                     'type' => 2,
                     'mappedBy' => NULL,
                     'inversedBy' => NULL,
@@ -378,6 +375,12 @@ class ClassMetadataBuilderTest extends OrmTestCase
                 ->build()
         );
 
+        $joinColumn = new JoinColumnMetadata();
+        $joinColumn->setTableName('CmsUser');
+        $joinColumn->setColumnName('group_id');
+        $joinColumn->setReferencedColumnName('id');
+        $joinColumn->setOnDelete('CASCADE');
+
         self::assertEquals(
             array(
                 'groups' => array(
@@ -391,17 +394,7 @@ class ClassMetadataBuilderTest extends OrmTestCase
                         4 => 'detach',
                     ),
                     'fetch' => FetchMode::EXTRA_LAZY,
-                    'joinColumns' => array(
-                        0 => array(
-                            'name'                 => 'group_id',
-                            'referencedColumnName' => 'id',
-                            'nullable'             => true,
-                            'unique'               => false,
-                            'onDelete'             => 'CASCADE',
-                            'columnDefinition'     => NULL,
-                            'tableName'            => 'CmsUser',
-                        ),
-                    ),
+                    'joinColumns' => [$joinColumn],
                     'type' => 2,
                     'mappedBy' => NULL,
                     'inversedBy' => NULL,
@@ -426,6 +419,13 @@ class ClassMetadataBuilderTest extends OrmTestCase
                 ->build()
         );
 
+        $joinColumn = new JoinColumnMetadata();
+        $joinColumn->setTableName('CmsUser');
+        $joinColumn->setColumnName('group_id');
+        $joinColumn->setReferencedColumnName('id');
+        $joinColumn->setOnDelete('CASCADE');
+        $joinColumn->setUnique(true);
+
         self::assertEquals(
             array(
                 'groups' => array (
@@ -439,17 +439,7 @@ class ClassMetadataBuilderTest extends OrmTestCase
                         4 => 'detach',
                     ),
                     'fetch' => FetchMode::EXTRA_LAZY,
-                    'joinColumns' => array (
-                        0 => array (
-                            'name'                 => 'group_id',
-                            'referencedColumnName' => 'id',
-                            'nullable'             => true,
-                            'unique'               => true,
-                            'onDelete'             => 'CASCADE',
-                            'columnDefinition'     => NULL,
-                            'tableName'            => 'CmsUser',
-                        ),
-                    ),
+                    'joinColumns' => [$joinColumn],
                     'type' => 1,
                     'mappedBy' => NULL,
                     'inversedBy' => NULL,
@@ -474,6 +464,12 @@ class ClassMetadataBuilderTest extends OrmTestCase
                 ->build()
         );
 
+        $joinColumn = new JoinColumnMetadata();
+        $joinColumn->setTableName('CmsUser');
+        $joinColumn->setColumnName('group_id');
+        $joinColumn->setReferencedColumnName('id');
+        $joinColumn->setOnDelete('CASCADE');
+
         self::assertEquals(
             array(
                 'groups' => array(
@@ -488,17 +484,7 @@ class ClassMetadataBuilderTest extends OrmTestCase
                     ),
                     'fetch' => FetchMode::EXTRA_LAZY,
                     'id' => true,
-                    'joinColumns' => array(
-                        0 => array(
-                            'name'                 => 'group_id',
-                            'referencedColumnName' => 'id',
-                            'nullable'             => true,
-                            'unique'               => false,
-                            'onDelete'             => 'CASCADE',
-                            'columnDefinition'     => NULL,
-                            'tableName'            => 'CmsUser',
-                        ),
-                    ),
+                    'joinColumns' => [$joinColumn],
                     'type' => 1,
                     'mappedBy' => NULL,
                     'inversedBy' => NULL,
@@ -537,6 +523,20 @@ class ClassMetadataBuilderTest extends OrmTestCase
                   ->build()
         );
 
+        $joinColumn = new JoinColumnMetadata();
+        $joinColumn->setColumnName('group_id');
+        $joinColumn->setReferencedColumnName('id');
+        $joinColumn->setOnDelete('CASCADE');
+
+        $inverseJoinColumn = new JoinColumnMetadata();
+        $inverseJoinColumn->setColumnName('user_id');
+        $inverseJoinColumn->setReferencedColumnName('id');
+
+        $joinTable = new JoinTableMetadata();
+        $joinTable->setName('groups_users');
+        $joinTable->addJoinColumn($joinColumn);
+        $joinTable->addInverseJoinColumn($inverseJoinColumn);
+
         self::assertEquals(
             array(
                 'groups' => array(
@@ -551,29 +551,7 @@ class ClassMetadataBuilderTest extends OrmTestCase
                         4 => 'detach',
                     ),
                     'fetch' => FetchMode::EXTRA_LAZY,
-                    'joinTable' => array(
-                        'joinColumns' => array(
-                            0 => array(
-                                'name' => 'group_id',
-                                'referencedColumnName' => 'id',
-                                'nullable' => true,
-                                'unique' => false,
-                                'onDelete' => 'CASCADE',
-                                'columnDefinition' => NULL,
-                            ),
-                        ),
-                        'inverseJoinColumns' => array(
-                            0 => array(
-                                'name' => 'user_id',
-                                'referencedColumnName' => 'id',
-                                'nullable' => true,
-                                'unique' => false,
-                                'onDelete' => NULL,
-                                'columnDefinition' => NULL,
-                            ),
-                        ),
-                        'name' => 'groups_users',
-                    ),
+                    'joinTable' => $joinTable,
                     'type' => 8,
                     'mappedBy' => NULL,
                     'inversedBy' => NULL,
@@ -657,6 +635,13 @@ class ClassMetadataBuilderTest extends OrmTestCase
                 ->build()
         );
 
+        $joinColumn = new JoinColumnMetadata();
+        $joinColumn->setTableName('CmsUser');
+        $joinColumn->setColumnName('group_id');
+        $joinColumn->setReferencedColumnName('id');
+        $joinColumn->setOnDelete('CASCADE');
+        $joinColumn->setUnique(true);
+
         self::assertEquals(
             array(
                 'groups' => array(
@@ -666,17 +651,7 @@ class ClassMetadataBuilderTest extends OrmTestCase
                         0 => 'remove'
                     ),
                     'fetch' => FetchMode::LAZY,
-                    'joinColumns' => array (
-                        0 => array (
-                            'name'                 => 'group_id',
-                            'referencedColumnName' => 'id',
-                            'nullable'             => true,
-                            'unique'               => true,
-                            'onDelete'             => 'CASCADE',
-                            'columnDefinition'     => NULL,
-                            'tableName'            => 'CmsUser',
-                        ),
-                    ),
+                    'joinColumns' => [$joinColumn],
                     'type' => 1,
                     'mappedBy' => NULL,
                     'inversedBy' => NULL,
@@ -741,6 +716,21 @@ class ClassMetadataBuilderTest extends OrmTestCase
             ->orphanRemoval()
             ->build();
 
+        $joinColumn = new JoinColumnMetadata();
+        $joinColumn->setColumnName('group_id');
+        $joinColumn->setReferencedColumnName('id');
+        $joinColumn->setOnDelete('CASCADE');
+
+        $inverseJoinColumn = new JoinColumnMetadata();
+        $inverseJoinColumn->setColumnName('cmsgroup_id');
+        $inverseJoinColumn->setReferencedColumnName('id');
+        $inverseJoinColumn->setOnDelete('CASCADE');
+
+        $joinTable = new JoinTableMetadata();
+        $joinTable->setName('cmsuser_cmsgroup');
+        $joinTable->addJoinColumn($joinColumn);
+        $joinTable->addInverseJoinColumn($inverseJoinColumn);
+
         self::assertEquals(
             array(
                 'groups' => array(
@@ -748,26 +738,7 @@ class ClassMetadataBuilderTest extends OrmTestCase
                     'targetEntity' => 'Doctrine\\Tests\\Models\\CMS\\CmsGroup',
                     'cascade' => array(),
                     'fetch' => FetchMode::LAZY,
-                    'joinTable' => array(
-                        'joinColumns' => array(
-                            0 => array(
-                                'name' => 'group_id',
-                                'referencedColumnName' => 'id',
-                                'nullable' => true,
-                                'unique' => false,
-                                'onDelete' => 'CASCADE',
-                                'columnDefinition' => NULL,
-                            ),
-                        ),
-                        'inverseJoinColumns' => array(
-                            0 => array(
-                                'name' => 'cmsgroup_id',
-                                'referencedColumnName' => 'id',
-                                'onDelete' => 'CASCADE'
-                            )
-                        ),
-                        'name' => 'cmsuser_cmsgroup',
-                    ),
+                    'joinTable' => $joinTable,
                     'type' => 8,
                     'mappedBy' => NULL,
                     'inversedBy' => NULL,
