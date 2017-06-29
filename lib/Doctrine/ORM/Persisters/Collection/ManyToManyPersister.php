@@ -261,7 +261,16 @@ class ManyToManyPersister extends AbstractCollectionPersister
         foreach ($parameters as $parameter) {
             list($name, $value) = $parameter;
             $field = $this->quoteStrategy->getColumnName($name, $targetClass, $this->platform);
-            $whereClauses[]     = sprintf('te.%s = ?', $field);
+            if (in_array($operator, [
+                Query\Expr\Comparison::GT,
+                Query\Expr\Comparison::GTE,
+                Query\Expr\Comparison::LT,
+                Query\Expr\Comparison::LTE
+                ])) {
+                $whereClauses[] = sprintf('te.%s %s ?', $field, $operator);
+            } else {
+                $whereClauses[] = sprintf('te.%s = ?', $field);
+            }
             $params[]           = $value;
         }
 
